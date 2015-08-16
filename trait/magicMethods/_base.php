@@ -8,20 +8,19 @@
 	trait magicMethods {
 
 		public $base;
-		public $baseName = '';
+		public function base() { return $this -> base; }
 		public $cache;
-		public $className = '';
 		public $current;
+		public function current() { return $this -> current; }
 		public $family;
-		public $familyName = '';
+		public function family() { return $this -> family; }
 		public $loaded = '';
 		public $loadingDirectory = '';
-		public $memory;
+		public $name = '';
 		public $parent;
-		public $parentName = '';
+		public function parent() { return $this -> parent; }
 		public $path;
 		public $settings;
-		public $version;
 
 		public function __construct ( $arguments = [] ) {
 			$this -> __configure( $arguments );
@@ -35,6 +34,7 @@
 			}
 		}
 		public function __call ( $method, $arguments = [] ) {
+			if ( $method == 'parent' ) die( $method );
 			if ( isset ( $this -> { $method } ) && is_callable( $this -> { $method } ) ) {
 				return call_user_func_array( $this -> { $method }, $arguments );
 			} else {
@@ -72,15 +72,11 @@
 					'family' => $this -> family,
 					'familyName' => $this -> familyName,
 					'parent' => $this,
-					'parentName' => $this -> className
+					'parentName' => $this -> name
 				];
 				$classExists = false;
-				if ( class_exists( 'handle' . ucwords( $method ) ) ) {
-					$methodName = 'handle' . ucwords( $method );
-					$classExists = true;
-				}
-				if ( !$classExists && class_exists( $method ) ) {
-					$methodName = $method;
+				if ( class_exists( $this -> name . '\\' . $method ) ) {
+					$methodName = $this -> name . '\\' . $method;
 					$classExists = true;
 				}
 				if ( $classExists ) {
@@ -93,10 +89,6 @@
 			}
 			return false;
 		}
-		private function __check () {
-			if ( is_callable( $this -> _check() ) ) return $this -> _check();
-			return null;
-		}
 		private function __configure ( $arguments = [] ) {
 			if ( is_callable( $this -> _configure( $arguments ) ) ) return $this -> _configure();
 			if ( !empty( $arguments ) ) {
@@ -105,24 +97,21 @@
 				}
 			}
 			global $settings;
-			$this -> className = get_class( $this );
+			$this -> name = get_class( $this );
 			if ( empty( $this -> parentName ) && empty( $this -> baseName ) ) {
 				$this -> base = $this;
-				$this -> baseName = $this -> className;
+				$this -> baseName = $this -> name;
                 unset( $this -> cache );
 			} else {
 				if ( $this -> parentName == $this -> baseName && empty( $this -> familyName ) ) {
 					$this -> family = $this;
-					$this -> familyName = $this -> className;
+					$this -> familyName = $this -> name;
 				}
 			}
 			$this -> settings = [];
-			$this -> memory = new stdClass();
-			if ( isset( $settings [ 'version' ] [ $this -> className ] ) ) $this -> version = $settings [ 'version' ] [ $this -> className ];
-			else unset( $this -> version );
-			if ( isset( $settings [ $this -> className ] ) ) $this -> settings = $settings [ $this -> className ];
+			if ( isset( $settings [ $this -> name ] ) ) $this -> settings = $settings [ $this -> name ];
 			$this -> loadingDirectory = $this -> getSettings( 'loadingDirectory', pathinfo( __FILE__, PATHINFO_DIRNAME ) );
-            /*if ( $this -> className != 'handleCache' ) $this -> cache = $this -> base -> cache -> __new();*/
+            /*if ( $this -> name != 'handleCache' ) $this -> cache = $this -> base -> cache -> __new();*/
 			return null;
 		}
 		private function __initialise ( $arguments = [] ) {
@@ -153,20 +142,8 @@
 			}
 			return null;
 		}
-		public function getMethodVersion( $method ) {
-			return isset( $settings [ 'version' ] [ $method ] ) ? $settings [ 'version' ] [ $method ] : ( isset( $settings [ 'version' ] [ 'handle' . ucwords( $method ) ] ) ? $settings [ 'version' ] [ 'handle' . ucwords( $method ) ] : ( isset( $settings [ 'version' ] [ 'default' ] ) ? $settings [ 'version' ] [ 'default' ] : false ) );
-		}
-		private function getFromMemory ( $method, $arguments = [] ) {
-			$key = sha1 ( $method . serialize ( $arguments ) );
-			if ( isset( $this->memory->{$key} ) ) return $this->memory->{$key};
-			return $this->memory->{$key} = call_user_func_array ( $this->{$method}, $arguments );
-		}
 		private function includeLoadingFile ( $method ) {
-			global $settings;
-			$version = $this -> getMethodVersion( $method );
 			$try = [
-                $this -> loadingDirectory . "/$method/$version/_base.php",
-				$this -> loadingDirectory . "/$method/$version/$method.php",
                 $this -> loadingDirectory . "/$method/_base.php",
                 $this -> loadingDirectory . "/$method/$method.php",
 				$this -> loadingDirectory . "/$method.php"
