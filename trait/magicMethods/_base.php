@@ -216,7 +216,7 @@ trait magicMethods {
 
 	/**
 	 * @param array $arguments
-	 * @return magicMethods
+	 * @return self
 	 */
 	public function __new ( $arguments = [] ) {
 		$return = new self;
@@ -249,10 +249,11 @@ trait magicMethods {
 	 * @return bool
 	 */
 	private function includeLoadingFile ( $method ) {
+		$loadingDirectory = $this->loadingDirectory;
 		$try = [
-			$this->loadingDirectory . "/$method/_base.php",
-			$this->loadingDirectory . "/$method/$method.php",
-			$this->loadingDirectory . "/$method.php"
+			"$loadingDirectory/$method/_base.php",
+			"$loadingDirectory/$method/$method.php",
+			"$loadingDirectory/$method.php"
 		];
 		foreach ( $try as $file ) {
 			if ( file_exists( $file ) ) {
