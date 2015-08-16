@@ -12,6 +12,4 @@ use handle;
  * @method handle\php\database parent
  * @method connection current
  */
-class connection extends handle\php\database {
-    use handle\framework;
-}
+class connection extends handle\php\database {}
