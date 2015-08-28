@@ -160,7 +160,7 @@ trait magicMethods {
 	 */
 	private function __load ( $method, $arguments = [] ) {
 		if ( !in_array( $method, $this->dontLoad ) ) {
-			if ( !$this->includeLoadingFile( $method ) ) return $this->{ $method } = false;
+			if ( !$this->__include( $method ) ) return $this->{ $method } = false;
 			$inheritance = [
 				'base' => $this->base,
 				'family' => $this->family,
@@ -248,7 +248,7 @@ trait magicMethods {
 	 * @param $method
 	 * @return bool
 	 */
-	private function includeLoadingFile ( $method ) {
+	private function __include ( $method ) {
 		$loadingDirectory = $this->loadingDirectory;
 		$try = [
 			"$loadingDirectory/$method/_base.php",
