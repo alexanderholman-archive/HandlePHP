@@ -257,6 +257,15 @@ trait magicMethods {
 		];
 		foreach ( $try as $file ) {
 			if ( file_exists( $file ) ) {
+				$classDir = '/class/';
+				$trait = str_replace( $classDir, '/trait', $file );
+				if ( file_exists( $trait ) ) {
+					include_once( $trait );
+				}
+				$interface = str_replace( $classDir, '/interface', $file );
+				if ( file_exists( $interface ) ) {
+					include_once( $interface );
+				}
 				$this->loaded = $file;
 				include_once( $file );
 				return true;
