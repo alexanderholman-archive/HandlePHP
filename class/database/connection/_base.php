@@ -12,4 +12,17 @@ use handle;
  * @method handle\php\database parent
  * @method connection current
  */
-class connection extends handle\php\database {}
+class connection extends handle\php\database {
+
+	public $connection  = false;
+	public $database    = "";
+	public $hostname    = "";
+	public $password    = "";
+	public $port        = "";
+	public $protocol    = "";
+	public $query;
+	public $queries     = [];
+	public $socket      = "";
+	public $username    = "";
+
+}
