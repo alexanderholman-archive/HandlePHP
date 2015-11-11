@@ -1,6 +1,6 @@
 <?php
 return [
     'handle\\php' => [
-        'loadingDirectory' => '/nas/web/symlinks/frameworks/handlePHP/class'
+        'loadingDirectory' => '/nas/web/symlinks/frameworks/handlePhp/class'
     ]
 ];
