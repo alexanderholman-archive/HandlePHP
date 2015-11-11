@@ -11,59 +11,18 @@ use handle;
  * @method handle\php\database family
  * @method handle\php\database parent
  * @method connection current
- *
- * @package handle\php\database
  */
 class connection extends handle\php\database {
 
-	/**
-	 * @var mixed
-	 */
 	public $connection  = false;
-
-	/**
-	 * @var string
-	 */
-	public $database    = "default";
-
-	/**
-	 * @var string
-	 */
-	public $hostname    = "localhost";
-
-	/**
-	 * @var string
-	 */
-	public $password    = "password";
-
-	/**
-	 * @var int
-	 */
-	public $port        = 3306;
-
-	/**
-	 * @var string
-	 */
-	public $protocol    = "mysqli";
-
-	/**
-	 * @var handle\php\database\query
-	 */
+	public $database    = "";
+	public $hostname    = "";
+	public $password    = "";
+	public $port        = "";
+	public $protocol    = "";
 	public $query;
-
-	/**
-	 * @var array
-	 */
 	public $queries     = [];
-
-	/**
-	 * @var int
-	 */
-	public $socket      = 0;
-
-	/**
-	 * @var string
-	 */
-	public $username    = "username";
+	public $socket      = "";
+	public $username    = "";
 
 }
