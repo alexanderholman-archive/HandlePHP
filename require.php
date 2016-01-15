@@ -6,7 +6,7 @@ $defaultSettings = require_once ( 'config/default.php' );
 
 $settings = ( isset( $settings ) ) ? array_merge_recursive( $defaultSettings, $settings ) : $defaultSettings;
 
-require_once( './trait/magic_methods/_base.php' );
+require_once( __DIR__ . '/trait/magic_methods/_base.php' );
 
 /**
  * Class php

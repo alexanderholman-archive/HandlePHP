@@ -14,7 +14,7 @@ use handle;
  *
  * @package handle\php\database
  */
-class connection extends handle\php\database {
+class connection {
 
 	/**
 	 * @var mixed
